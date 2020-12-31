@@ -1,7 +1,5 @@
 package datajpacom.example.proyectoconjpa;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+import datajpacom.example.proyectoconjpa.auth.filter.JWTAuthenticationFilter;
 import datajpacom.example.proyectoconjpa.auth.handler.LoginSuccessHandler;
 import datajpacom.example.proyectoconjpa.service.JpaUserDetailsService;
 //Se puede usarprePostEnable
@@ -44,14 +42,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO Auto-generated method stub
-        http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/listar", "/api/**").permitAll()
+        http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/listar").permitAll()
         /*.antMatchers("/uploads/**").hasAnyRole("USER")
         .antMatchers("/ver/**").hasAnyRole("USER")
         .antMatchers("/form/**").hasAnyRole("ADMIN")
         .antMatchers("/eliminar/**").hasAnyRole("ADMIN")
         .antMatchers("/factura/**").hasAnyRole("ADMIN")*/
         .anyRequest().authenticated()
-        .and()
+        /*.and()
             .formLogin()
             .successHandler(successHandler)
             .loginPage("/login")
@@ -59,8 +57,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .logout().permitAll()
         .and()
-        .exceptionHandling().accessDeniedPage("/error_403")
+        .exceptionHandling().accessDeniedPage("/error_403")*/
         .and()
+        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
         .csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

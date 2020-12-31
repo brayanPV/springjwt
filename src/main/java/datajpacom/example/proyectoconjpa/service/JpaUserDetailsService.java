@@ -41,6 +41,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for(Role role: usuario.getRoles()){
             authorities.add(new SimpleGrantedAuthority(role.getAuthoritY()));
+            logger.info("ROL DEL USUARIO: " +role.getAuthoritY());
         }
         if(authorities.isEmpty()){
             logger.error("El usuario " + username + " no tienen rol asignado");
